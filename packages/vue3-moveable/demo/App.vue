@@ -1,16 +1,17 @@
 <template>
   <div class="root">
     <div class="container" style="position: relative">
-      <div class="target">Target</div>
-      <button @click="toggleDraggable">Toggle {{draggable}}</button>
+      <div class="target">target</div>
+      <button @click="toggleDraggable">Toggle {{ draggable }}</button>
       <moveable
         v-bind:target="['.target']"
-        v-bind:draggable="draggable"
         v-bind:throttleDrag="1"
-        v-bind:edgeDraggable="false"
-        v-bind:startDragRotate="0"
-        v-bind:throttleDragRotate="0"
+        v-bind:draggable="true"
+        v-bind:scalable="true"
+        v-bind:rotatable="true"
         @drag="onDrag"
+        @scale="onScale"
+        @rotate="onRotate"
       />
     </div>
   </div>
@@ -20,23 +21,28 @@ import { defineComponent } from "vue";
 import Moveable from "../src/Moveable.vue";
 
 export default defineComponent({
-    components: {
-        Moveable,
+  components: {
+    Moveable,
+  },
+  data() {
+    return {
+      draggable: true,
+    };
+  },
+  methods: {
+    onDrag(e) {
+      e.target.style.transform = e.transform;
     },
-    data(){
-        return {
-            draggable: true,
-        };
+    onScale(e) {
+      e.target.style.transform = e.drag.transform;
     },
-    methods: {
-        onDrag(e) {
-            e.target.style.transform = e.transform;
-        },
-        toggleDraggable() {
-            console.log(this.draggable);
-            this.draggable = !this.draggable;
-        }
-    }
+    onRotate(e) {
+      e.target.style.transform = e.drag.transform;
+    },
+    toggleDraggable() {
+      this.draggable = !this.draggable;
+    },
+  },
 });
 </script>
 <style>
